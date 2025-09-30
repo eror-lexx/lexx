@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KyyyLLexx - TikTok Link Bio & Add-ons</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background-color: #121212;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(255, 0, 132, 0.2);
+            display: none;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .container.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Animation for each link item */
+        .link-item {
+            background-color: #1a1a1a;
+            padding: 15px 20px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+            border: 1px solid #333;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUpFadeIn 0.5s forwards;
+        }
+
+        /* Staggered animation for each link */
+        .link-item:nth-child(1) { animation-delay: 0.1s; }
+        .link-item:nth-child(2) { animation-delay: 0.2s; }
+        .link-item:nth-child(3) { animation-delay: 0.3s; }
+        .link-item:nth-child(4) { animation-delay: 0.4s; }
+        .link-item:nth-child(5) { animation-delay: 0.5s; }
+
+        @keyframes slideUpFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .link-item:hover {
+            background-color: #ff0099;
+            transform: translateX(5px) scale(1.02);
+            color: #000;
+        }
+
+        .bio-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .profile-section {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: slideUpFadeIn 0.8s forwards;
+        }
+
+        .profile-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 20px;
+            border: 3px solid #ff0099;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 0, 153, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 0, 153, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 0, 153, 0); }
+        }
+
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+        }
+
+        .link-text {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+        }
+
+        .link-text i {
+            font-size: 20px;
+        }
+
+        .link-arrow {
+            font-size: 18px;
+        }
+
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            opacity: 0;
+            animation: fadeIn 1s forwards 0.8s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Add-ons Section */
+        .addons-section {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background-color: #121212;
+            padding: 20px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUpFadeIn 0.6s forwards;
+        }
+
+        .back-button {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #ff0099;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .back-button:hover {
+            color: #ffffff;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .header-content {
+            flex: 1;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            color: #ff0099;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #ccc;
+            font-size: 16px;
+        }
+
+        .addons-container {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            align-items: center;
+        }
+
+        #my-addon {
+            background-color: #1a1a1a;
+            color: #fff;
+            border: 1px solid #333;
+            padding: 15px 25px;
+            border-radius: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 400px;
+            justify-content: space-between;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUpFadeIn 0.6s forwards 0.3s;
+        }
+
+        #my-addon:hover {
+            background-color: #ff0099;
+            color: #000;
+            transform: translateX(5px);
+        }
+
+        #addon-info {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #1a1a1a;
+            border-radius: 12px;
+            border: 1px solid #333;
+            width: 100%;
+            max-width: 400px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.4s ease;
+        }
+
+        #addon-info.show {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #addon-info p {
+            margin-bottom: 15px;
+            font-size: 16px;
+            color: #fff;
+        }
+
+        .contact-icons {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+        }
+
+        .contact-icons a {
+            color: #fff;
+            font-size: 28px;
+            transition: transform 0.2s ease;
+        }
+
+        .contact-icons a:hover {
+            transform: scale(1.2);
+        }
+
+        .contact-icons a.discord { color: #5865F2; }
+        .contact-icons a.whatsapp { color: #25D366; }
+    </style>
+</head>
+<body>
+    <!-- Bio Section -->
+    <div id="bio-section" class="container">
+        <div class="bio-section">
+            <div class="profile-section">
+                <div class="profile-image">
+                    <img src="https://files.catbox.moe/77z84t.jpg" alt="KyyyLLexx">
+                </div>
+                <h1 class="profile-name">KyyyLLexx</h1>
+            </div>
+
+            <div class="links" id="main-links">
+                <!-- Diisi via JS -->
+            </div>
+
+            <div class="footer">
+                <p>Mede In Lexx | Dev KyyyLLexx</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add-ons Section -->
+    <div id="addons-section" class="container">
+        <div class="addons-section">
+            <div class="header">
+                <button class="back-button" onclick="showBio()">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <div class="header-content">
+                    <h1>My Add-ons</h1>
+                    <p>Kumpulan add-on mineckrap</p>
+                </div>
+            </div>
+            <div class="addons-container">
+                <button id="my-addon" onclick="toggleAddonInfo()">
+                    <span class="link-text">
+                        <i class="fas fa-cube"></i>
+                        My Addon
+                    </span>
+                    <span class="link-arrow"></span>
+                </button>
+
+                <div id="addon-info">
+                    <p>I often upload here</p>
+                    <div class="contact-icons">
+                        <a href="https://dcd.gg/lexxSigmaBoy" class="discord" target="_blank" title="Discord">
+                            <i class="fab fa-discord"></i>
+                        </a>
+                        <a href="https://whatsapp.com/channel/0029VasfxJv72WTtBKADRN2g" class="whatsapp" target="_blank" title="WhatsApp">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const bioLinks = [
+            { name: "My Add-on", icon: "fas fa-cube", action: "showAddons" },
+            { name: "Saluran WhatsApp", icon: "fab fa-whatsapp", url: "https://whatsapp.com/channel/0029VasfxJv72WTtBKADRN2g" },
+            { name: "Discord", icon: "fab fa-discord", url: "https://dcd.gg/lexxSigmaBoy" },
+            { name: "Instagram", icon: "fab fa-instagram", url: "https://instagram.com/kyyylmc" },
+            { name: "GitHub", icon: "fab fa-github", url: "https://github.com/eror-lexx" }
+        ];
+
+        function showBio() {
+            document.getElementById('addons-section').classList.remove('active');
+            setTimeout(() => {
+                document.getElementById('bio-section').classList.add('active');
+            }, 300);
+        }
+
+        function showAddons() {
+            document.getElementById('bio-section').classList.remove('active');
+            setTimeout(() => {
+                document.getElementById('addons-section').classList.add('active');
+            }, 300);
+        }
+
+        function toggleAddonInfo() {
+            const info = document.getElementById('addon-info');
+            info.classList.toggle('show');
+        }
+
+        function renderBioLinks() {
+            const container = document.getElementById('main-links');
+            container.innerHTML = '';
+
+            bioLinks.forEach(link => {
+                const item = document.createElement('div');
+                item.className = 'link-item';
+
+                if (link.action) {
+                    item.setAttribute('onclick', link.action + '()');
+                    item.innerHTML = `
+                        <span class="link-text">
+                            <i class="${link.icon}"></i>
+                            ${link.name}
+                        </span>
+                        <span class="link-arrow"></span>
+                    `;
+                } else if (link.url) {
+                    item.innerHTML = `
+                        <a href="${link.url}" target="_blank" style="text-decoration:none; color:inherit; width:100%; display:flex; align-items:center; justify-content:space-between;">
+                            <span class="link-text">
+                                <i class="${link.icon}"></i>
+                                ${link.name}
+                            </span>
+                            <span class="link-arrow"></span>
+                        </a>
+                    `;
+                }
+                container.appendChild(item);
+            });
+        }
+
+        // Show content immediately without loading screen
+        document.addEventListener('DOMContentLoaded', () => {
+            renderBioLinks();
+            showBio();
+        });
+    </script>
+</body>
+</html>
